@@ -1,6 +1,7 @@
 "use client"
 
 import { getProductImage } from "./product-images"
+import { isBlockedShopifyUrl } from "./image-proxy"
 
 interface Product {
   style: string
@@ -243,11 +244,18 @@ export function generatePDF(products: Product[], customerInfo: CustomerInfo) {
         <tbody>
           ${products
             .map((product) => {
-              // Get a valid image URL, never use empty string
-              const imageUrl =
-                product.image_url && product.image_url.trim() !== ""
-                  ? product.image_url
-                  : getProductImage(product.style)
+              // Get a valid image URL, avoiding blocked Shopify URLs
+              let imageUrl = product.image_url && product.image_url.trim() !== "" ? product.image_url : ""
+
+              // If it's a blocked Shopify URL, use local image instead
+              if (imageUrl && isBlockedShopifyUrl(imageUrl)) {
+                imageUrl = getProductImage(product.style)
+              }
+
+              // Final fallback
+              if (!imageUrl) {
+                imageUrl = getProductImage(product.style)
+              }
 
               const placeholderUrl = `/placeholder.svg?height=300&width=300&text=Style+${product.style}&bg=8B5CF6&textColor=white`
               const isPlaceholder = !imageUrl || imageUrl.includes("placeholder")

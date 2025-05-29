@@ -5,7 +5,7 @@ export function createClient() {
   const cookieStore = cookies()
 
   // Check if environment variables are set
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://ierfmeothkmjcdortdfu.supabase.co"
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
   if (!supabaseUrl || !supabaseAnonKey) {

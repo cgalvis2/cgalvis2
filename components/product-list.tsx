@@ -9,6 +9,7 @@ import { ProductFeatures } from "./product-features"
 import { ProductImage } from "./product-image"
 import { generatePDF } from "@/app/utils/pdf-generator"
 import type { Product } from "@/app/actions/products"
+import { getProductImage } from "@/app/utils/product-images"
 
 interface ProductListProps {
   products: Product[]
@@ -32,7 +33,37 @@ export function ProductList({ products }: ProductListProps) {
   const handleDownloadPDF = () => {
     const selectedProductData = products
       .filter((product) => selectedProducts.includes(product.style))
-      .map((product) => ({
+      .map((product) => {
+        // Check if the image URL is from Shopify and use local image instead
+        const imageUrl =
+          product.image_url && product.image_url.includes("cdn.shopify.com")
+            ? getProductImage(product.style)
+            : product.image_url
+
+        return {
+          style: product.style,
+          name: product.name,
+          sizes: product.sizes,
+          control: product.control,
+          retail: product.retail_price,
+          disc65: product.disc_65,
+          disc70: product.disc_70,
+          disc73: product.disc_73,
+          image_url: imageUrl,
+        }
+      })
+    generatePDF(selectedProductData, customerInfo)
+  }
+
+  const handleDownloadFullCatalog = () => {
+    const allProductData = products.map((product) => {
+      // Check if the image URL is from Shopify and use local image instead
+      const imageUrl =
+        product.image_url && product.image_url.includes("cdn.shopify.com")
+          ? getProductImage(product.style)
+          : product.image_url
+
+      return {
         style: product.style,
         name: product.name,
         sizes: product.sizes,
@@ -41,23 +72,9 @@ export function ProductList({ products }: ProductListProps) {
         disc65: product.disc_65,
         disc70: product.disc_70,
         disc73: product.disc_73,
-        image_url: product.image_url,
-      }))
-    generatePDF(selectedProductData, customerInfo)
-  }
-
-  const handleDownloadFullCatalog = () => {
-    const allProductData = products.map((product) => ({
-      style: product.style,
-      name: product.name,
-      sizes: product.sizes,
-      control: product.control,
-      retail: product.retail_price,
-      disc65: product.disc_65,
-      disc70: product.disc_70,
-      disc73: product.disc_73,
-      image_url: product.image_url,
-    }))
+        image_url: imageUrl,
+      }
+    })
     generatePDF(allProductData, customerInfo)
   }
 

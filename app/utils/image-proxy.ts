@@ -10,21 +10,18 @@ export function getProxiedImageUrl(url: string): string {
     return url
   }
 
-  // Check if it's a Shopify CDN URL
+  // Check if it's a blocked Shopify CDN URL (cdn.shopify.com)
   if (url.includes("cdn.shopify.com")) {
-    try {
-      // Try to use the URL constructor to parse the URL
-      const parsedUrl = new URL(url)
+    console.log(`Blocked Shopify CDN URL detected: ${url}`)
+    // These URLs are blocked by CORS, return null to trigger fallback
+    return ""
+  }
 
-      // Add a cache-busting query parameter
-      parsedUrl.searchParams.append("_cb", Date.now().toString())
-
-      // Return the modified URL
-      return parsedUrl.toString()
-    } catch (error) {
-      console.error("Error parsing Shopify URL:", error)
-      return url
-    }
+  // Check if it's a working Shopify URL (vedettestore.com/cdn/shop/files/)
+  if (url.includes("vedettestore.com/cdn/shop/files/")) {
+    console.log(`Working Shopify URL detected: ${url}`)
+    // These URLs work, return as-is
+    return url
   }
 
   // Return the original URL for non-Shopify URLs
@@ -32,7 +29,7 @@ export function getProxiedImageUrl(url: string): string {
 }
 
 /**
- * Checks if a URL is a Shopify CDN URL
+ * Checks if a URL is a Shopify CDN URL (either format)
  * @param url The URL to check
  * @returns True if the URL is a Shopify CDN URL, false otherwise
  */
@@ -41,5 +38,34 @@ export function isShopifyUrl(url: string): boolean {
     return false
   }
 
+  return url.includes("cdn.shopify.com") || url.includes("vedettestore.com/cdn/shop/files/")
+}
+
+/**
+ * Checks if a URL is a blocked Shopify CDN URL
+ * @param url The URL to check
+ * @returns True if the URL is a blocked Shopify CDN URL, false otherwise
+ */
+export function isBlockedShopifyUrl(url: string): boolean {
+  if (!url || typeof url !== "string") {
+    return false
+  }
+
   return url.includes("cdn.shopify.com")
+}
+
+/**
+ * Gets a local fallback image for a product when external images fail
+ * @param productStyle The product style number
+ * @param imageUrl The original image URL that failed
+ * @returns A fallback image URL
+ */
+export function getFallbackImageUrl(productStyle: string, imageUrl?: string): string {
+  // Log the failure for debugging
+  if (imageUrl) {
+    console.log(`Using fallback for image: ${imageUrl} (Style: ${productStyle})`)
+  }
+
+  // Return a placeholder SVG with the style number
+  return `/placeholder.svg?height=300&width=300&text=Style+${productStyle}&bg=8B5CF6&textColor=white`
 }

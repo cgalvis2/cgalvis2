@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { getProductImage } from "@/app/utils/product-images"
+import { isBlockedShopifyUrl, getProxiedImageUrl } from "@/app/utils/image-proxy"
 
 interface CorsImageProps {
   src: string | null | undefined
@@ -25,69 +26,78 @@ export function CorsImage({ src, alt, productStyle, className = "", onLoad, onEr
     setIsLoading(true)
     setHasError(false)
 
-    // Determine the image source - never use empty string
-    const sourceUrl = src && src.trim() !== "" ? src : getProductImage(productStyle) || fallbackImageUrl
+    // Check if the source is a blocked Shopify URL
+    const isBlocked = src && isBlockedShopifyUrl(src)
 
-    // Check if it's a Shopify CDN URL
-    const isShopifyUrl = sourceUrl.includes("cdn.shopify.com")
-
-    if (isShopifyUrl) {
-      // For Shopify URLs, we'll try to load them directly first
-      setImageSrc(sourceUrl)
-
-      // Also preload the image to check if it loads
-      const img = new Image()
-      img.onload = () => {
+    if (isBlocked) {
+      console.log(`Blocked Shopify URL detected, using local fallback for style ${productStyle}: ${src}`)
+      // Use local image immediately for blocked URLs
+      const localImage = getProductImage(productStyle)
+      setImageSrc(localImage || fallbackImageUrl)
+      setIsLoading(false)
+    } else if (src && src.trim() !== "") {
+      // For working URLs (including vedettestore.com Shopify URLs), try to use them
+      const proxiedUrl = getProxiedImageUrl(src)
+      if (proxiedUrl) {
+        console.log(`Using working URL for style ${productStyle}: ${proxiedUrl}`)
+        setImageSrc(proxiedUrl)
+      } else {
+        console.log(`URL was blocked by proxy, using local fallback for style ${productStyle}: ${src}`)
+        const localImage = getProductImage(productStyle)
+        setImageSrc(localImage || fallbackImageUrl)
         setIsLoading(false)
-        onLoad?.()
       }
-      img.onerror = () => {
-        console.warn(`Direct Shopify image failed to load: ${sourceUrl}`)
-        setHasError(true)
-        setIsLoading(false)
-        onError?.()
-
-        // Fall back to the local image or placeholder
-        setImageSrc(getProductImage(productStyle) || fallbackImageUrl)
-      }
-      img.src = sourceUrl
     } else {
-      // For non-Shopify URLs, just use them directly
-      setImageSrc(sourceUrl)
+      // No src provided, use local image
+      console.log(`No src provided, using local image for style ${productStyle}`)
+      const localImage = getProductImage(productStyle)
+      setImageSrc(localImage || fallbackImageUrl)
       setIsLoading(false)
     }
-  }, [src, productStyle, fallbackImageUrl, onLoad, onError])
+  }, [src, productStyle, fallbackImageUrl])
 
   const handleImageError = () => {
-    console.error(`Image error for: ${imageSrc}`)
+    console.error(`Image error for style ${productStyle}: ${imageSrc}`)
     setHasError(true)
     setIsLoading(false)
     onError?.()
 
-    // If the current source failed, try the fallback
-    if (imageSrc !== fallbackImageUrl) {
+    // If the current source failed, try the local fallback
+    const localImage = getProductImage(productStyle)
+    if (imageSrc !== localImage && localImage) {
+      console.log(`Falling back to local image for style ${productStyle}: ${localImage}`)
+      setImageSrc(localImage)
+      setHasError(false) // Reset error for the new attempt
+    } else if (imageSrc !== fallbackImageUrl) {
+      console.log(`Falling back to placeholder for style ${productStyle}: ${fallbackImageUrl}`)
       setImageSrc(fallbackImageUrl)
+      setHasError(false) // Reset error for the new attempt
     }
   }
 
   const handleImageLoad = () => {
+    console.log(`Successfully loaded image for style ${productStyle}: ${imageSrc}`)
     setIsLoading(false)
+    setHasError(false)
     onLoad?.()
   }
+
+  // Ensure imageSrc is never an empty string
+  const finalImageSrc = imageSrc || fallbackImageUrl
 
   return (
     <div className={`relative ${className}`}>
       {/* Loading indicator */}
-      {isLoading && (
+      {isLoading && !hasError && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
           <div className="w-8 h-8 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin"></div>
         </div>
       )}
 
       <img
-        src={imageSrc || fallbackImageUrl}
+        src={finalImageSrc || "/placeholder.svg"}
         alt={alt}
-        className={`w-full h-full object-contain ${isLoading ? "opacity-0" : "opacity-100"}`}
+        className={`w-full h-full object-contain ${isLoading && !hasError ? "opacity-0" : "opacity-100"}`}
         onError={handleImageError}
         onLoad={handleImageLoad}
       />
