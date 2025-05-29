@@ -2,6 +2,9 @@ import { createClient } from "@/utils/supabase/server"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
+// Force dynamic rendering since this page uses cookies via Supabase
+export const dynamic = "force-dynamic"
+
 export default async function DbCheckPage() {
   const supabase = createClient()
 

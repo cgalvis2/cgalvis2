@@ -4,6 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
 import { ProductImage } from "@/components/product-image"
 
+// Force dynamic rendering since this page uses cookies via Supabase
+export const dynamic = "force-dynamic"
+
 export default async function AdminPage() {
   const products = await getProducts()
 

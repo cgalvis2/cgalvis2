@@ -1,5 +1,8 @@
 import { createClient } from "@/utils/supabase/server"
 
+// Force dynamic rendering since this page uses cookies via Supabase
+export const dynamic = "force-dynamic"
+
 export default async function TestConnectionPage() {
   let connectionStatus = "Unknown"
   let errorDetails = null

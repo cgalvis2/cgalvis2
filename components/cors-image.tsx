@@ -60,7 +60,11 @@ export function CorsImage({ src, alt, productStyle, className = "", onLoad, onEr
     console.error(`Image error for style ${productStyle}: ${imageSrc}`)
     setHasError(true)
     setIsLoading(false)
-    onError?.()
+
+    // Call the optional onError callback
+    if (onError) {
+      onError()
+    }
 
     // If the current source failed, try the local fallback
     const localImage = getProductImage(productStyle)
@@ -79,7 +83,11 @@ export function CorsImage({ src, alt, productStyle, className = "", onLoad, onEr
     console.log(`Successfully loaded image for style ${productStyle}: ${imageSrc}`)
     setIsLoading(false)
     setHasError(false)
-    onLoad?.()
+
+    // Call the optional onLoad callback
+    if (onLoad) {
+      onLoad()
+    }
   }
 
   // Ensure imageSrc is never an empty string

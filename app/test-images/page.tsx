@@ -1,5 +1,8 @@
 import { getProducts } from "../actions/products"
 
+// Force dynamic rendering since this page uses cookies via Supabase
+export const dynamic = "force-dynamic"
+
 export default async function TestImagesPage() {
   const products = await getProducts()
 
