@@ -4,9 +4,9 @@ import "./globals.css"
 import { LanguageProvider } from "./contexts/language-context"
 
 export const metadata: Metadata = {
-  title: "Vedette Shapewear - Wholesale Price List 2025",
-  description: "Premium shapewear wholesale catalog with competitive pricing",
-  generator: "v0.dev",
+  title: "Responsive Header Example",
+  description: "A responsive header design with no horizontal scrolling",
+    generator: 'v0.dev'
 }
 
 export default function RootLayout({
@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className="overflow-x-hidden max-w-[100vw]">
         <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>

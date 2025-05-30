@@ -7,28 +7,32 @@ export function LanguageToggle() {
   const { language, setLanguage } = useLanguage()
 
   return (
-    <div className="flex items-center space-x-1 bg-white rounded-lg border border-gray-200 p-1">
+    <div className="flex items-center bg-white rounded-lg border border-gray-200 shadow-sm">
       <Button
-        variant={language === "en" ? "default" : "ghost"}
+        variant="ghost"
         size="sm"
         onClick={() => setLanguage("en")}
-        className={`px-2 py-1 h-8 ${
-          language === "en" ? "bg-purple-600 text-white hover:bg-purple-700" : "hover:bg-gray-100"
+        className={`px-3 py-2 h-10 rounded-l-lg rounded-r-none border-r border-gray-200 transition-all duration-200 ${
+          language === "en"
+            ? "bg-purple-600 text-white hover:bg-purple-700 shadow-sm"
+            : "hover:bg-gray-50 text-gray-700"
         }`}
       >
-        <span className="text-lg mr-1">🇺🇸</span>
-        <span className="text-xs font-medium">EN</span>
+        <span className="text-xl mr-2">🇺🇸</span>
+        <span className="text-sm font-medium hidden sm:inline">EN</span>
       </Button>
       <Button
-        variant={language === "es" ? "default" : "ghost"}
+        variant="ghost"
         size="sm"
         onClick={() => setLanguage("es")}
-        className={`px-2 py-1 h-8 ${
-          language === "es" ? "bg-purple-600 text-white hover:bg-purple-700" : "hover:bg-gray-100"
+        className={`px-3 py-2 h-10 rounded-r-lg rounded-l-none transition-all duration-200 ${
+          language === "es"
+            ? "bg-purple-600 text-white hover:bg-purple-700 shadow-sm"
+            : "hover:bg-gray-50 text-gray-700"
         }`}
       >
-        <span className="text-lg mr-1">🇪🇸</span>
-        <span className="text-xs font-medium">ES</span>
+        <span className="text-xl mr-2">🇪🇸</span>
+        <span className="text-sm font-medium hidden sm:inline">ES</span>
       </Button>
     </div>
   )

@@ -16,6 +16,7 @@ import { RefreshCw, Bug, Database, ImageIcon } from "lucide-react"
 import Link from "next/link"
 import type { Product } from "./actions/products"
 import { useLanguage } from "./contexts/language-context"
+import Header from "@/components/header"
 
 export default function VedetteWholesale() {
   const { t } = useLanguage()
@@ -45,9 +46,6 @@ export default function VedetteWholesale() {
         setProducts(productsData)
         console.log("Loaded products:", productsData.length)
 
-        // Log the first few products for debugging
-        console.log("Sample products:", productsData.slice(0, 3))
-
         // Preload images
         setIsLoadingImages(true)
 
@@ -75,7 +73,9 @@ export default function VedetteWholesale() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-purple-50 via-white to-pink-50">
+      <Header />
+
       {/* Loading overlay */}
       {(isLoadingProducts || isLoadingImages) && (
         <div className="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 flex items-center justify-center">
@@ -112,65 +112,60 @@ export default function VedetteWholesale() {
         </div>
       )}
 
-      {/* Header */}
-      <header className="bg-white shadow-lg border-b border-purple-100">
-        <div className="container mx-auto px-4 py-6">
+      {/* Admin Controls */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="container mx-auto px-4 py-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-xl">V</span>
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                  {t("header.title")}
-                </h1>
-                <p className="text-gray-600">{t("header.subtitle")}</p>
-              </div>
+              <h1 className="text-lg font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                {t("header.title")}
+              </h1>
+              <p className="text-gray-600 text-sm">{t("header.subtitle")}</p>
             </div>
 
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
               <LanguageToggle />
 
-              <div className="flex items-center space-x-2">
-                <Button variant="outline" size="sm" onClick={handleRefresh} className="flex items-center gap-1">
-                  <RefreshCw className="w-4 h-4" />
-                  {t("header.refresh")}
-                </Button>
+              <Button variant="outline" size="sm" onClick={handleRefresh} className="flex items-center gap-1">
+                <RefreshCw className="w-4 h-4" />
+                <span className="hidden sm:inline">{t("header.refresh")}</span>
+              </Button>
 
-                <Button variant="ghost" size="sm" onClick={() => setDebugMode(!debugMode)}>
-                  {debugMode ? t("header.hideDebug") : t("header.debug")}
-                </Button>
-
-                {/* Debug Tools Dropdown */}
-                {debugMode && (
-                  <div className="flex space-x-2">
-                    <Link href="/image-debug">
-                      <Button variant="outline" size="sm" className="flex items-center gap-1">
-                        <ImageIcon className="w-4 h-4" />
-                        {t("header.imageDebug")}
-                      </Button>
-                    </Link>
-
-                    <Link href="/db-check">
-                      <Button variant="outline" size="sm" className="flex items-center gap-1">
-                        <Database className="w-4 h-4" />
-                        {t("header.dbCheck")}
-                      </Button>
-                    </Link>
-
-                    <Link href="/test-images">
-                      <Button variant="outline" size="sm" className="flex items-center gap-1">
-                        <Bug className="w-4 h-4" />
-                        {t("header.testImages")}
-                      </Button>
-                    </Link>
-                  </div>
-                )}
-              </div>
+              <Button variant="ghost" size="sm" onClick={() => setDebugMode(!debugMode)}>
+                {debugMode ? t("header.hideDebug") : t("header.debug")}
+              </Button>
             </div>
           </div>
+
+          {/* Debug Tools */}
+          {debugMode && (
+            <div className="mt-4 pt-4 border-t border-gray-200">
+              <div className="flex flex-wrap gap-2">
+                <Link href="/image-debug">
+                  <Button variant="outline" size="sm" className="flex items-center gap-1 text-xs">
+                    <ImageIcon className="w-4 h-4" />
+                    {t("header.imageDebug")}
+                  </Button>
+                </Link>
+
+                <Link href="/db-check">
+                  <Button variant="outline" size="sm" className="flex items-center gap-1 text-xs">
+                    <Database className="w-4 h-4" />
+                    {t("header.dbCheck")}
+                  </Button>
+                </Link>
+
+                <Link href="/test-images">
+                  <Button variant="outline" size="sm" className="flex items-center gap-1 text-xs">
+                    <Bug className="w-4 h-4" />
+                    {t("header.testImages")}
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
-      </header>
+      </div>
 
       {/* Debug Panel */}
       {debugMode && (

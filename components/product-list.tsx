@@ -107,25 +107,27 @@ export function ProductList({ products }: ProductListProps) {
   return (
     <section className="py-12 px-4">
       <div className="container mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h3 className="text-3xl font-bold">{t("products.title")}</h3>
-          <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6 sm:mb-8">
+          <h3 className="text-2xl sm:text-3xl font-bold">{t("products.title")}</h3>
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
             <Button
               onClick={handleDownloadFullCatalog}
-              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 w-full sm:w-auto"
               disabled={products.length === 0}
             >
               <Download className="w-4 h-4 mr-2" />
-              {t("products.downloadFull")}
+              <span className="truncate">{t("products.downloadFull")}</span>
             </Button>
             {selectedProducts.length > 0 && (
               <Button
                 onClick={handleDownloadPDF}
                 variant="outline"
-                className="border-purple-300 text-purple-600 hover:bg-purple-50"
+                className="border-purple-300 text-purple-600 hover:bg-purple-50 w-full sm:w-auto"
               >
                 <Download className="w-4 h-4 mr-2" />
-                {t("products.downloadSelected")} ({selectedProducts.length})
+                <span className="truncate">
+                  {t("products.downloadSelected")} ({selectedProducts.length})
+                </span>
               </Button>
             )}
           </div>
