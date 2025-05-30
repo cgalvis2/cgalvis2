@@ -4,8 +4,8 @@ import "./globals.css"
 import { LanguageProvider } from "./contexts/language-context"
 
 export const metadata: Metadata = {
-  title: "Responsive Header Example",
-  description: "A responsive header design with no horizontal scrolling",
+  title: "Vedette Shapewear Wholesale Price List 2025",
+  description: "Official wholesale price list for Vedette Shapewear products",
     generator: 'v0.dev'
 }
 
