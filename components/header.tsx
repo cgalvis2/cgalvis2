@@ -35,10 +35,11 @@ export default function Header() {
           {/* Logo */}
           <div className="flex-shrink-0">
             <button onClick={scrollToTop} className="flex items-center hover:opacity-80 transition-opacity">
-              <div className="h-8 w-8 bg-gradient-to-r from-purple-600 to-blue-600 rounded-md flex items-center justify-center">
-                <span className="text-white font-bold text-lg">V</span>
-              </div>
-              <span className="ml-2 text-xl font-bold text-gray-900">Vedette</span>
+              <img
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Vedette%20Logo-HrpGt27y3qHQKP0DDr3JFeqHH0KHS7.png"
+                alt="Vedette Shapewear Logo"
+                className="h-16 w-auto"
+              />
             </button>
           </div>
 
