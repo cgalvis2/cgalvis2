@@ -10,12 +10,15 @@ import { WholesaleTerms } from "@/components/wholesale-terms"
 import { CustomerInfoForm } from "@/components/customer-info-form"
 import { HeroSection } from "@/components/hero-section"
 import { ContactSection } from "@/components/contact-section"
+import { LanguageToggle } from "@/components/language-toggle"
 import { Button } from "@/components/ui/button"
 import { RefreshCw, Bug, Database, ImageIcon } from "lucide-react"
 import Link from "next/link"
 import type { Product } from "./actions/products"
+import { useLanguage } from "./contexts/language-context"
 
 export default function VedetteWholesale() {
+  const { t } = useLanguage()
   const [products, setProducts] = useState<Product[]>([])
   const [isLoadingProducts, setIsLoadingProducts] = useState(true)
   const [isLoadingImages, setIsLoadingImages] = useState(true)
@@ -33,7 +36,7 @@ export default function VedetteWholesale() {
         const productsData = await getProducts()
 
         if (productsData.length === 0) {
-          setError("No products found. Please check your database connection.")
+          setError(t("error.noProducts"))
           setIsLoadingProducts(false)
           setIsLoadingImages(false)
           return
@@ -57,7 +60,7 @@ export default function VedetteWholesale() {
         }
       } catch (err) {
         console.error("Error loading data:", err)
-        setError("Failed to load products. Please try again later.")
+        setError(t("error.loadFailed"))
       } finally {
         setIsLoadingProducts(false)
         setIsLoadingImages(false)
@@ -65,7 +68,7 @@ export default function VedetteWholesale() {
     }
 
     loadData()
-  }, [refreshKey])
+  }, [refreshKey, t])
 
   const handleRefresh = () => {
     setRefreshKey((prev) => prev + 1)
@@ -79,7 +82,7 @@ export default function VedetteWholesale() {
           <div className="text-center">
             <div className="w-16 h-16 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin mx-auto mb-4"></div>
             <p className="text-purple-800 font-medium">
-              {isLoadingProducts ? "Loading products..." : "Loading product images..."}
+              {isLoadingProducts ? t("loading.products") : t("loading.images")}
             </p>
           </div>
         </div>
@@ -101,7 +104,7 @@ export default function VedetteWholesale() {
                 </svg>
               </div>
               <div>
-                <p className="font-bold">Error</p>
+                <p className="font-bold">{t("error.title")}</p>
                 <p>{error}</p>
               </div>
             </div>
@@ -119,47 +122,51 @@ export default function VedetteWholesale() {
               </div>
               <div>
                 <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                  Vedette Shapewear
+                  {t("header.title")}
                 </h1>
-                <p className="text-gray-600">Wholesale Price List 2025</p>
+                <p className="text-gray-600">{t("header.subtitle")}</p>
               </div>
             </div>
 
-            <div className="flex items-center space-x-2">
-              <Button variant="outline" size="sm" onClick={handleRefresh} className="flex items-center gap-1">
-                <RefreshCw className="w-4 h-4" />
-                Refresh
-              </Button>
+            <div className="flex items-center space-x-4">
+              <LanguageToggle />
 
-              <Button variant="ghost" size="sm" onClick={() => setDebugMode(!debugMode)}>
-                {debugMode ? "Hide Debug" : "Debug"}
-              </Button>
+              <div className="flex items-center space-x-2">
+                <Button variant="outline" size="sm" onClick={handleRefresh} className="flex items-center gap-1">
+                  <RefreshCw className="w-4 h-4" />
+                  {t("header.refresh")}
+                </Button>
 
-              {/* Debug Tools Dropdown */}
-              {debugMode && (
-                <div className="flex space-x-2">
-                  <Link href="/image-debug">
-                    <Button variant="outline" size="sm" className="flex items-center gap-1">
-                      <ImageIcon className="w-4 h-4" />
-                      Image Debug
-                    </Button>
-                  </Link>
+                <Button variant="ghost" size="sm" onClick={() => setDebugMode(!debugMode)}>
+                  {debugMode ? t("header.hideDebug") : t("header.debug")}
+                </Button>
 
-                  <Link href="/db-check">
-                    <Button variant="outline" size="sm" className="flex items-center gap-1">
-                      <Database className="w-4 h-4" />
-                      DB Check
-                    </Button>
-                  </Link>
+                {/* Debug Tools Dropdown */}
+                {debugMode && (
+                  <div className="flex space-x-2">
+                    <Link href="/image-debug">
+                      <Button variant="outline" size="sm" className="flex items-center gap-1">
+                        <ImageIcon className="w-4 h-4" />
+                        {t("header.imageDebug")}
+                      </Button>
+                    </Link>
 
-                  <Link href="/test-images">
-                    <Button variant="outline" size="sm" className="flex items-center gap-1">
-                      <Bug className="w-4 h-4" />
-                      Test Images
-                    </Button>
-                  </Link>
-                </div>
-              )}
+                    <Link href="/db-check">
+                      <Button variant="outline" size="sm" className="flex items-center gap-1">
+                        <Database className="w-4 h-4" />
+                        {t("header.dbCheck")}
+                      </Button>
+                    </Link>
+
+                    <Link href="/test-images">
+                      <Button variant="outline" size="sm" className="flex items-center gap-1">
+                        <Bug className="w-4 h-4" />
+                        {t("header.testImages")}
+                      </Button>
+                    </Link>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>

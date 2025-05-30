@@ -1,5 +1,8 @@
+"use client"
+
 import { Badge } from "@/components/ui/badge"
 import { Star, Award, Zap, Shield } from "lucide-react"
+import { useLanguage } from "@/app/contexts/language-context"
 
 interface ProductFeaturesProps {
   productName: string
@@ -7,36 +10,57 @@ interface ProductFeaturesProps {
 }
 
 export function ProductFeatures({ productName, control }: ProductFeaturesProps) {
+  const { t } = useLanguage()
   const name = productName.toLowerCase()
   const features = []
 
   // Add features based on product type
   if (name.includes("latex")) {
-    features.push({ icon: <Zap className="w-3 h-3" />, text: "Latex Material", color: "bg-yellow-100 text-yellow-800" })
+    features.push({
+      icon: <Zap className="w-3 h-3" />,
+      text: t("features.latexMaterial"),
+      color: "bg-yellow-100 text-yellow-800",
+    })
   }
 
   if (name.includes("zipper")) {
-    features.push({ icon: <Award className="w-3 h-3" />, text: "Zipper Closure", color: "bg-blue-100 text-blue-800" })
+    features.push({
+      icon: <Award className="w-3 h-3" />,
+      text: t("features.zipperClosure"),
+      color: "bg-blue-100 text-blue-800",
+    })
   }
 
   if (name.includes("hook") || name.includes("eye")) {
-    features.push({ icon: <Award className="w-3 h-3" />, text: "Hook & Eye", color: "bg-green-100 text-green-800" })
+    features.push({
+      icon: <Award className="w-3 h-3" />,
+      text: t("features.hookEye"),
+      color: "bg-green-100 text-green-800",
+    })
   }
 
   if (name.includes("post-surgery") || name.includes("surgery")) {
     features.push({
       icon: <Shield className="w-3 h-3" />,
-      text: "Post-Surgery",
+      text: t("features.postSurgery"),
       color: "bg-purple-100 text-purple-800",
     })
   }
 
   if (name.includes("sport") || name.includes("performance")) {
-    features.push({ icon: <Star className="w-3 h-3" />, text: "Sport Design", color: "bg-orange-100 text-orange-800" })
+    features.push({
+      icon: <Star className="w-3 h-3" />,
+      text: t("features.sportDesign"),
+      color: "bg-orange-100 text-orange-800",
+    })
   }
 
-  if (control === "Extra-Firm") {
-    features.push({ icon: <Shield className="w-3 h-3" />, text: "Extra-Firm", color: "bg-red-100 text-red-800" })
+  if (control === "Extra-Firm" || control === "Extra Firm") {
+    features.push({
+      icon: <Shield className="w-3 h-3" />,
+      text: t("features.extraFirm"),
+      color: "bg-red-100 text-red-800",
+    })
   }
 
   return (

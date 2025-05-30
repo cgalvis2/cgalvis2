@@ -5,8 +5,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { useLanguage } from "@/app/contexts/language-context"
 
 export function CustomerInfoForm() {
+  const { t } = useLanguage()
   const [customerInfo, setCustomerInfo] = useState({
     businessName: "",
     contactName: "",
@@ -21,67 +23,67 @@ export function CustomerInfoForm() {
       <div className="container mx-auto max-w-2xl">
         <Card>
           <CardHeader>
-            <CardTitle>Customer Information</CardTitle>
-            <CardDescription>Please provide your business details to customize your price list</CardDescription>
+            <CardTitle>{t("customer.title")}</CardTitle>
+            <CardDescription>{t("customer.description")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="businessName">Business Name</Label>
+                <Label htmlFor="businessName">{t("customer.businessName")}</Label>
                 <Input
                   id="businessName"
                   value={customerInfo.businessName}
                   onChange={(e) => setCustomerInfo((prev) => ({ ...prev, businessName: e.target.value }))}
-                  placeholder="Your Business Name"
+                  placeholder={t("customer.businessNamePlaceholder")}
                 />
               </div>
               <div>
-                <Label htmlFor="contactName">Contact Name</Label>
+                <Label htmlFor="contactName">{t("customer.contactName")}</Label>
                 <Input
                   id="contactName"
                   value={customerInfo.contactName}
                   onChange={(e) => setCustomerInfo((prev) => ({ ...prev, contactName: e.target.value }))}
-                  placeholder="Your Name"
+                  placeholder={t("customer.contactNamePlaceholder")}
                 />
               </div>
             </div>
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t("customer.email")}</Label>
                 <Input
                   id="email"
                   type="email"
                   value={customerInfo.email}
                   onChange={(e) => setCustomerInfo((prev) => ({ ...prev, email: e.target.value }))}
-                  placeholder="your@email.com"
+                  placeholder={t("customer.emailPlaceholder")}
                 />
               </div>
               <div>
-                <Label htmlFor="phone">Phone</Label>
+                <Label htmlFor="phone">{t("customer.phone")}</Label>
                 <Input
                   id="phone"
                   value={customerInfo.phone}
                   onChange={(e) => setCustomerInfo((prev) => ({ ...prev, phone: e.target.value }))}
-                  placeholder="(555) 123-4567"
+                  placeholder={t("customer.phonePlaceholder")}
                 />
               </div>
             </div>
             <div>
-              <Label htmlFor="address">Business Address</Label>
+              <Label htmlFor="address">{t("customer.address")}</Label>
               <Input
                 id="address"
                 value={customerInfo.address}
                 onChange={(e) => setCustomerInfo((prev) => ({ ...prev, address: e.target.value }))}
-                placeholder="123 Business St, City, State 12345"
+                placeholder={t("customer.addressPlaceholder")}
               />
             </div>
             <div>
-              <Label htmlFor="notes">Additional Notes</Label>
+              <Label htmlFor="notes">{t("customer.notes")}</Label>
               <Textarea
                 id="notes"
                 value={customerInfo.notes}
                 onChange={(e) => setCustomerInfo((prev) => ({ ...prev, notes: e.target.value }))}
-                placeholder="Any specific requirements or questions..."
+                placeholder={t("customer.notesPlaceholder")}
                 rows={3}
               />
             </div>

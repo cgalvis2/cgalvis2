@@ -10,12 +10,14 @@ import { ProductImage } from "./product-image"
 import { generatePDF } from "@/app/utils/pdf-generator"
 import type { Product } from "@/app/actions/products"
 import { getProductImage } from "@/app/utils/product-images"
+import { useLanguage } from "@/app/contexts/language-context"
 
 interface ProductListProps {
   products: Product[]
 }
 
 export function ProductList({ products }: ProductListProps) {
+  const { t } = useLanguage()
   const [selectedProducts, setSelectedProducts] = useState<string[]>([])
   const [customerInfo, setCustomerInfo] = useState({
     businessName: "",
@@ -78,11 +80,35 @@ export function ProductList({ products }: ProductListProps) {
     generatePDF(allProductData, customerInfo)
   }
 
+  const getCategoryTranslation = (category: string) => {
+    const categoryMap: Record<string, string> = {
+      "Waist Training": t("category.waistTraining"),
+      "Full Body": t("category.fullBody"),
+      Bodysuit: t("category.bodysuit"),
+      "Butt Lifter": t("category.buttLifter"),
+      Shorts: t("category.shorts"),
+      "Support Bra": t("category.supportBra"),
+      Leggings: t("category.leggings"),
+    }
+    return categoryMap[category] || category
+  }
+
+  const getControlTranslation = (control: string) => {
+    const controlMap: Record<string, string> = {
+      "Extra-Firm": t("control.extraFirm"),
+      "Extra Firm": t("control.extraFirm"),
+      Firm: t("control.firm"),
+      Medium: t("control.medium"),
+      Light: t("control.light"),
+    }
+    return controlMap[control] || control
+  }
+
   return (
     <section className="py-12 px-4">
       <div className="container mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h3 className="text-3xl font-bold">Product Catalog</h3>
+          <h3 className="text-3xl font-bold">{t("products.title")}</h3>
           <div className="flex gap-4">
             <Button
               onClick={handleDownloadFullCatalog}
@@ -90,7 +116,7 @@ export function ProductList({ products }: ProductListProps) {
               disabled={products.length === 0}
             >
               <Download className="w-4 h-4 mr-2" />
-              Download Full Catalog
+              {t("products.downloadFull")}
             </Button>
             {selectedProducts.length > 0 && (
               <Button
@@ -99,7 +125,7 @@ export function ProductList({ products }: ProductListProps) {
                 className="border-purple-300 text-purple-600 hover:bg-purple-50"
               >
                 <Download className="w-4 h-4 mr-2" />
-                Download Selected ({selectedProducts.length})
+                {t("products.downloadSelected")} ({selectedProducts.length})
               </Button>
             )}
           </div>
@@ -117,11 +143,8 @@ export function ProductList({ products }: ProductListProps) {
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-medium text-gray-900 mb-2">No Products Available</h3>
-            <p className="text-gray-500 max-w-md mx-auto">
-              We're having trouble loading the product catalog. Please try again later or contact support if the issue
-              persists.
-            </p>
+            <h3 className="text-xl font-medium text-gray-900 mb-2">{t("products.noProducts")}</h3>
+            <p className="text-gray-500 max-w-md mx-auto">{t("products.noProductsDesc")}</p>
           </div>
         ) : (
           /* Product Grid View */
@@ -207,7 +230,7 @@ export function ProductList({ products }: ProductListProps) {
                                     : product.category === "Leggings"
                                       ? "🦵"
                                       : "✨"}{" "}
-                        {product.category}
+                        {getCategoryTranslation(product.category)}
                       </Badge>
                     </div>
                     {/* Control Level Badge */}
@@ -215,12 +238,12 @@ export function ProductList({ products }: ProductListProps) {
                       <Badge
                         variant="outline"
                         className={`text-xs ${
-                          product.control === "Extra-Firm"
+                          product.control === "Extra-Firm" || product.control === "Extra Firm"
                             ? "bg-red-100/90 text-red-800 border-red-300/50"
                             : "bg-blue-100/90 text-blue-800 border-blue-300/50"
                         } backdrop-blur-sm`}
                       >
-                        {product.control}
+                        {getControlTranslation(product.control)}
                       </Badge>
                     </div>
                   </div>
@@ -254,7 +277,7 @@ export function ProductList({ products }: ProductListProps) {
                     {/* Savings Badge */}
                     <div className="mt-3 text-center">
                       <Badge variant="secondary" className="bg-green-100 text-green-800 text-xs">
-                        Save up to ${(product.retail_price - product.disc_73).toFixed(2)}
+                        {t("products.saveUpTo")} ${(product.retail_price - product.disc_73).toFixed(2)}
                       </Badge>
                     </div>
                   </div>

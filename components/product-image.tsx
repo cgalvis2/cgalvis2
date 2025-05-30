@@ -4,6 +4,7 @@ import { useState } from "react"
 import { ZoomIn } from "lucide-react"
 import { ImageZoomModal } from "./image-zoom-modal"
 import { CorsImage } from "./cors-image"
+import { useLanguage } from "@/app/contexts/language-context"
 
 interface ProductImageProps {
   src: string | null | undefined
@@ -14,6 +15,7 @@ interface ProductImageProps {
 }
 
 export function ProductImage({ src, alt, productName, productStyle, className = "" }: ProductImageProps) {
+  const { t } = useLanguage()
   const [isZoomOpen, setIsZoomOpen] = useState(false)
   const [imageError, setImageError] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -45,7 +47,7 @@ export function ProductImage({ src, alt, productName, productStyle, className = 
 
         {/* Click hint */}
         <div className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          Click to zoom
+          {t("products.clickToZoom")}
         </div>
 
         {/* Style number badge for fallback images */}
