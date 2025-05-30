@@ -54,11 +54,13 @@ export function generatePDF(products: Product[], customerInfo: CustomerInfo) {
           border-bottom: 2px solid #8B5CF6;
           padding-bottom: 20px;
         }
+        .logo-container {
+          margin-bottom: 15px;
+        }
         .logo {
-          font-size: 28px;
-          font-weight: bold;
-          color: #8B5CF6;
-          margin-bottom: 5px;
+          max-height: 80px;
+          width: auto;
+          margin: 0 auto;
         }
         .subtitle {
           font-size: 18px;
@@ -175,7 +177,9 @@ export function generatePDF(products: Product[], customerInfo: CustomerInfo) {
     </head>
     <body>
       <div class="header">
-        <div class="logo">Vedette Shapewear</div>
+        <div class="logo-container">
+          <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Vedette%20Logo-HrpGt27y3qHQKP0DDr3JFeqHH0KHS7.png" alt="Vedette Shapewear Logo" class="logo" />
+        </div>
         <div class="subtitle">Wholesale Price List 2025</div>
         <div style="font-size: 12px; color: #666;">Generated on ${currentDate}</div>
       </div>
