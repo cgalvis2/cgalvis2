@@ -11,9 +11,6 @@ import { CustomerInfoForm } from "@/components/customer-info-form"
 import { HeroSection } from "@/components/hero-section"
 import { ContactSection } from "@/components/contact-section"
 import { LanguageToggle } from "@/components/language-toggle"
-import { Button } from "@/components/ui/button"
-import { RefreshCw, Bug, Database, ImageIcon } from "lucide-react"
-import Link from "next/link"
 import type { Product } from "./actions/products"
 import { useLanguage } from "./contexts/language-context"
 import Header from "@/components/header"
@@ -24,8 +21,6 @@ export default function VedetteWholesale() {
   const [isLoadingProducts, setIsLoadingProducts] = useState(true)
   const [isLoadingImages, setIsLoadingImages] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [debugMode, setDebugMode] = useState(false)
-  const [refreshKey, setRefreshKey] = useState(0)
 
   useEffect(() => {
     async function loadData() {
@@ -66,11 +61,7 @@ export default function VedetteWholesale() {
     }
 
     loadData()
-  }, [refreshKey, t])
-
-  const handleRefresh = () => {
-    setRefreshKey((prev) => prev + 1)
-  }
+  }, [t])
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-purple-50 via-white to-pink-50">
@@ -123,71 +114,12 @@ export default function VedetteWholesale() {
               <p className="text-gray-600 text-sm">{t("header.subtitle")}</p>
             </div>
 
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center">
               <LanguageToggle />
-
-              <Button variant="outline" size="sm" onClick={handleRefresh} className="flex items-center gap-1">
-                <RefreshCw className="w-4 h-4" />
-                <span className="hidden sm:inline">{t("header.refresh")}</span>
-              </Button>
-
-              <Button variant="ghost" size="sm" onClick={() => setDebugMode(!debugMode)}>
-                {debugMode ? t("header.hideDebug") : t("header.debug")}
-              </Button>
             </div>
           </div>
-
-          {/* Debug Tools */}
-          {debugMode && (
-            <div className="mt-4 pt-4 border-t border-gray-200">
-              <div className="flex flex-wrap gap-2">
-                <Link href="/image-debug">
-                  <Button variant="outline" size="sm" className="flex items-center gap-1 text-xs">
-                    <ImageIcon className="w-4 h-4" />
-                    {t("header.imageDebug")}
-                  </Button>
-                </Link>
-
-                <Link href="/db-check">
-                  <Button variant="outline" size="sm" className="flex items-center gap-1 text-xs">
-                    <Database className="w-4 h-4" />
-                    {t("header.dbCheck")}
-                  </Button>
-                </Link>
-
-                <Link href="/test-images">
-                  <Button variant="outline" size="sm" className="flex items-center gap-1 text-xs">
-                    <Bug className="w-4 h-4" />
-                    {t("header.testImages")}
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          )}
         </div>
       </div>
-
-      {/* Debug Panel */}
-      {debugMode && (
-        <div className="container mx-auto p-4 bg-gray-100 border rounded-md my-4">
-          <h2 className="text-lg font-semibold mb-2">Debug Information</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <h3 className="text-sm font-medium">Products Loaded: {products.length}</h3>
-              <p className="text-xs text-gray-600">Loading state: {isLoadingProducts ? "Loading" : "Complete"}</p>
-              <p className="text-xs text-gray-600">Images state: {isLoadingImages ? "Loading" : "Complete"}</p>
-            </div>
-            <div>
-              <h3 className="text-sm font-medium">Sample Product Data:</h3>
-              {products.length > 0 && (
-                <pre className="text-xs bg-gray-200 p-2 rounded overflow-auto max-h-40">
-                  {JSON.stringify(products[0], null, 2)}
-                </pre>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
 
       <HeroSection />
       <WholesaleTerms />

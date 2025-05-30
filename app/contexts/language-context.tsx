@@ -15,12 +15,6 @@ const translations = {
     // Header
     "header.title": "Vedette Shapewear",
     "header.subtitle": "Wholesale Price List 2025",
-    "header.refresh": "Refresh",
-    "header.debug": "Debug",
-    "header.hideDebug": "Hide Debug",
-    "header.imageDebug": "Image Debug",
-    "header.dbCheck": "DB Check",
-    "header.testImages": "Test Images",
 
     // Loading and errors
     "loading.products": "Loading products...",
@@ -148,12 +142,6 @@ const translations = {
     // Header
     "header.title": "Vedette Shapewear",
     "header.subtitle": "Lista de Precios Mayorista 2025",
-    "header.refresh": "Actualizar",
-    "header.debug": "Depurar",
-    "header.hideDebug": "Ocultar Depuración",
-    "header.imageDebug": "Depurar Imágenes",
-    "header.dbCheck": "Verificar BD",
-    "header.testImages": "Probar Imágenes",
 
     // Loading and errors
     "loading.products": "Cargando productos...",
