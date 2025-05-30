@@ -19,7 +19,7 @@ export function CustomerInfoForm() {
   })
 
   return (
-    <section className="py-12 px-4 bg-gray-50">
+    <section id="customer-information" className="py-12 px-4 bg-gray-50">
       <div className="container mx-auto max-w-2xl">
         <Card>
           <CardHeader>

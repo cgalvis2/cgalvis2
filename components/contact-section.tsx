@@ -7,7 +7,7 @@ export function ContactSection() {
   const { t } = useLanguage()
 
   return (
-    <section className="py-12 px-4 bg-gray-900 text-white">
+    <section id="contact-information" className="py-12 px-4 bg-gray-900 text-white">
       <div className="container mx-auto">
         <div className="grid md:grid-cols-2 gap-12">
           <div>

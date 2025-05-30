@@ -135,6 +135,14 @@ const translations = {
     "pdf.close": "Close",
     "pdf.internationalShipping":
       "International Shipping: Standard rates apply. Confirm before shipping via email or WhatsApp",
+
+    // Navigation
+    "nav.home": "Home",
+    "nav.products": "Products",
+    "nav.about": "About",
+    "nav.contact": "Contact",
+    "nav.openMenu": "Open main menu",
+    "nav.closeMenu": "Close main menu",
   },
   es: {
     // Header
@@ -262,6 +270,14 @@ const translations = {
     "pdf.close": "Cerrar",
     "pdf.internationalShipping":
       "Envío Internacional: Se aplican tarifas estándar. Confirmar antes del envío por correo electrónico o WhatsApp",
+
+    // Navigation
+    "nav.home": "Inicio",
+    "nav.products": "Productos",
+    "nav.about": "Acerca de",
+    "nav.contact": "Contacto",
+    "nav.openMenu": "Abrir menú principal",
+    "nav.closeMenu": "Cerrar menú principal",
   },
 }
 

@@ -105,7 +105,7 @@ export function ProductList({ products }: ProductListProps) {
   }
 
   return (
-    <section className="py-12 px-4">
+    <section id="product-catalog" className="py-12 px-4">
       <div className="container mx-auto">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6 sm:mb-8">
           <h3 className="text-2xl sm:text-3xl font-bold">{t("products.title")}</h3>
