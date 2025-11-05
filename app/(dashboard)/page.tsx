@@ -36,7 +36,6 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        // Fetch stats separately to avoid relationship issues
         const [productsRes, ordersRes, customersRes] = await Promise.all([
           supabase.from("products").select("id, quantity, min_stock_level, retail_price"),
           supabase.from("orders").select("*"),
@@ -58,7 +57,6 @@ export default function Dashboard() {
           monthlyGrowth: 12.5,
         })
 
-        // Fetch low stock products
         const { data: lowStockData } = await supabase
           .from("products")
           .select("*")
@@ -67,7 +65,6 @@ export default function Dashboard() {
 
         setLowStockProducts(lowStockData || [])
 
-        // Fetch recent orders and customers separately, then join manually
         const { data: recentOrdersData } = await supabase
           .from("orders")
           .select("*")
@@ -75,12 +72,10 @@ export default function Dashboard() {
           .limit(5)
 
         if (recentOrdersData && recentOrdersData.length > 0) {
-          // Get customer data for these orders
           const customerIds = recentOrdersData.map((order) => order.customer_id).filter((id) => id !== null)
 
           const { data: customersData } = await supabase.from("customers").select("*").in("id", customerIds)
 
-          // Manually join orders with customers
           const enrichedOrders = recentOrdersData.map((order) => ({
             ...order,
             customer: customersData?.find((customer) => customer.id === order.customer_id),
@@ -110,27 +105,31 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-          <p className="text-muted-foreground">Welcome back! Here's what's happening with your inventory.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Dashboard</h1>
+          <p className="text-sm sm:text-base text-muted-foreground">
+            Welcome back! Here's what's happening with your inventory.
+          </p>
         </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline">Download Report</Button>
-          <Button>View Analytics</Button>
+        <div className="flex flex-col xs:flex-row items-stretch xs:items-center gap-2 w-full sm:w-auto">
+          <Button variant="outline" size="sm" className="w-full xs:w-auto bg-transparent">
+            Download Report
+          </Button>
+          <Button size="sm" className="w-full xs:w-auto">
+            View Analytics
+          </Button>
         </div>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <Card className="border-0 shadow-lg bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
             <DollarSign className="h-4 w-4 text-blue-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${stats.totalRevenue.toFixed(2)}</div>
+            <div className="text-xl sm:text-2xl font-bold">${stats.totalRevenue.toFixed(2)}</div>
             <p className="text-xs text-muted-foreground flex items-center">
               <ArrowUpRight className="h-3 w-3 mr-1 text-green-500" />+{stats.monthlyGrowth}% from last month
             </p>
@@ -143,7 +142,7 @@ export default function Dashboard() {
             <Package className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalProducts}</div>
+            <div className="text-xl sm:text-2xl font-bold">{stats.totalProducts}</div>
             <p className="text-xs text-muted-foreground flex items-center">
               <Activity className="h-3 w-3 mr-1" />
               Active inventory items
@@ -157,7 +156,7 @@ export default function Dashboard() {
             <ShoppingCart className="h-4 w-4 text-purple-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalOrders}</div>
+            <div className="text-xl sm:text-2xl font-bold">{stats.totalOrders}</div>
             <p className="text-xs text-muted-foreground flex items-center">
               <TrendingUp className="h-3 w-3 mr-1" />
               All time orders
@@ -171,7 +170,7 @@ export default function Dashboard() {
             <AlertTriangle className="h-4 w-4 text-red-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">{stats.lowStockItems}</div>
+            <div className="text-xl sm:text-2xl font-bold text-red-600">{stats.lowStockItems}</div>
             <p className="text-xs text-muted-foreground flex items-center">
               <ArrowDownRight className="h-3 w-3 mr-1 text-red-500" />
               Items need restocking
@@ -180,54 +179,57 @@ export default function Dashboard() {
         </Card>
       </div>
 
-      {/* Content Grid */}
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 grid-cols-1 lg:grid-cols-3">
         {/* Recent Orders */}
         <Card className="lg:col-span-2 border-0 shadow-lg">
           <CardHeader>
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
-                <CardTitle>Recent Orders</CardTitle>
+                <CardTitle className="text-lg sm:text-xl">Recent Orders</CardTitle>
                 <CardDescription>Latest orders from your customers</CardDescription>
               </div>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" className="w-full sm:w-auto bg-transparent">
                 View All
               </Button>
             </div>
           </CardHeader>
           <CardContent>
             {recentOrders.length > 0 ? (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Order #</TableHead>
-                    <TableHead>Customer</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Total</TableHead>
-                    <TableHead>Date</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {recentOrders.map((order) => (
-                    <TableRow key={order.id}>
-                      <TableCell className="font-medium">{order.order_number}</TableCell>
-                      <TableCell>{order.customer?.name || "Guest"}</TableCell>
-                      <TableCell>
-                        <Badge
-                          variant={order.status === "delivered" ? "default" : "secondary"}
-                          className={order.status === "delivered" ? "bg-green-100 text-green-800" : ""}
-                        >
-                          {order.status}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="font-medium">${order.total_amount.toFixed(2)}</TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {new Date(order.created_at).toLocaleDateString()}
-                      </TableCell>
+              <div className="overflow-x-auto -mx-6 px-6">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="whitespace-nowrap">Order #</TableHead>
+                      <TableHead className="whitespace-nowrap hidden sm:table-cell">Customer</TableHead>
+                      <TableHead className="whitespace-nowrap">Status</TableHead>
+                      <TableHead className="whitespace-nowrap hidden xs:table-cell">Total</TableHead>
+                      <TableHead className="whitespace-nowrap hidden md:table-cell">Date</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {recentOrders.map((order) => (
+                      <TableRow key={order.id}>
+                        <TableCell className="font-medium whitespace-nowrap">{order.order_number}</TableCell>
+                        <TableCell className="hidden sm:table-cell">{order.customer?.name || "Guest"}</TableCell>
+                        <TableCell>
+                          <Badge
+                            variant={order.status === "delivered" ? "default" : "secondary"}
+                            className={order.status === "delivered" ? "bg-green-100 text-green-800" : ""}
+                          >
+                            {order.status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="font-medium hidden xs:table-cell">
+                          ${order.total_amount.toFixed(2)}
+                        </TableCell>
+                        <TableCell className="text-muted-foreground hidden md:table-cell whitespace-nowrap">
+                          {new Date(order.created_at).toLocaleDateString()}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
             ) : (
               <div className="text-center py-8 text-muted-foreground">
                 <ShoppingCart className="h-12 w-12 mx-auto mb-4 opacity-50" />
@@ -240,7 +242,7 @@ export default function Dashboard() {
         {/* Low Stock Alert */}
         <Card className="border-0 shadow-lg">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
               <AlertTriangle className="h-5 w-5 text-red-500" />
               Low Stock Alert
             </CardTitle>
@@ -250,14 +252,14 @@ export default function Dashboard() {
             {lowStockProducts.map((product) => (
               <div
                 key={product.id}
-                className="flex items-center justify-between space-x-4 p-3 rounded-lg bg-red-50 dark:bg-red-950/20"
+                className="flex flex-col sm:flex-row sm:items-center justify-between space-y-2 sm:space-y-0 sm:space-x-4 p-3 rounded-lg bg-red-50 dark:bg-red-950/20"
               >
-                <div className="flex-1 space-y-1">
-                  <p className="text-sm font-medium leading-none">{product.name}</p>
-                  <p className="text-xs text-muted-foreground">SKU: {product.sku}</p>
+                <div className="flex-1 space-y-1 min-w-0">
+                  <p className="text-sm font-medium leading-none truncate">{product.name}</p>
+                  <p className="text-xs text-muted-foreground truncate">SKU: {product.sku}</p>
                 </div>
-                <div className="flex flex-col items-end space-y-1">
-                  <Badge variant="destructive" className="text-xs">
+                <div className="flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-normal space-x-2 sm:space-x-0 sm:space-y-1">
+                  <Badge variant="destructive" className="text-xs whitespace-nowrap">
                     {product.quantity} left
                   </Badge>
                   <Progress value={(product.quantity / product.min_stock_level) * 100} className="w-16 h-2" />
@@ -267,10 +269,10 @@ export default function Dashboard() {
             {lowStockProducts.length === 0 && (
               <div className="text-center py-8 text-muted-foreground">
                 <Package className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>All products are well stocked</p>
+                <p className="text-sm">All products are well stocked</p>
               </div>
             )}
-            <Button asChild className="w-full" variant="outline">
+            <Button asChild className="w-full bg-transparent" variant="outline">
               <Link href="/inventory">Manage Inventory</Link>
             </Button>
           </CardContent>

@@ -26,9 +26,9 @@ export function Header() {
   }
 
   return (
-    <header className="flex h-16 items-center gap-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-6">
-      <div className="w-full flex-1">
-        <div className="relative max-w-md">
+    <header className="flex h-auto md:h-16 items-center gap-2 sm:gap-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 sm:px-6 py-3 md:py-0 flex-wrap md:flex-nowrap">
+      <div className="w-full md:flex-1 order-2 md:order-1">
+        <div className="relative max-w-md hidden sm:block">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             type="search"
@@ -38,13 +38,18 @@ export function Header() {
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
-        <Button size="sm" className="gap-2">
+      <div className="flex items-center gap-1 sm:gap-2 order-1 md:order-2 w-full md:w-auto justify-end md:justify-normal">
+        <Button size="sm" className="gap-2 hidden sm:flex">
           <Plus className="h-4 w-4" />
           <span className="hidden sm:inline">Add Product</span>
         </Button>
 
-        <Button variant="ghost" size="icon" className="relative">
+        <Button size="icon" variant="ghost" className="sm:hidden">
+          <Plus className="h-4 w-4" />
+          <span className="sr-only">Add Product</span>
+        </Button>
+
+        <Button variant="ghost" size="icon" className="relative hidden sm:flex">
           <MessageSquare className="h-4 w-4" />
         </Button>
 
