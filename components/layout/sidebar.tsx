@@ -74,16 +74,16 @@ export function Sidebar() {
   const [open, setOpen] = useState(false)
 
   const SidebarContent = () => (
-    <div className="flex h-full flex-col bg-slate-900 dark:bg-slate-950">
+    <div className="flex h-full flex-col bg-white dark:bg-slate-950 border-r border-border">
       {/* Logo */}
-      <div className="flex h-16 items-center px-6 border-b border-slate-800">
+      <div className="flex h-16 items-center px-6 border-b border-border">
         <Link href="/" className="flex items-center gap-3">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
             <Zap className="h-5 w-5 text-primary-foreground" />
           </div>
           <div className="flex flex-col">
-            <span className="text-lg font-semibold text-white">Inventory</span>
-            <span className="text-xs text-slate-400">Pro Dashboard</span>
+            <span className="text-lg font-semibold text-foreground">Inventory</span>
+            <span className="text-xs text-muted-foreground">Pro Dashboard</span>
           </div>
         </Link>
       </div>
@@ -92,7 +92,7 @@ export function Sidebar() {
       <ScrollArea className="flex-1 px-4 py-6">
         <div className="space-y-2">
           <div className="px-2 py-2">
-            <h2 className="mb-2 px-2 text-xs font-semibold tracking-tight text-slate-400 uppercase">Main</h2>
+            <h2 className="mb-2 px-2 text-xs font-semibold tracking-tight text-muted-foreground uppercase">Main</h2>
             <div className="space-y-1">
               {navigation.map((item) => {
                 const isActive = pathname === item.href
@@ -101,8 +101,10 @@ export function Sidebar() {
                     key={item.name}
                     href={item.href}
                     className={cn(
-                      "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all hover:bg-slate-800 hover:text-white",
-                      isActive ? "bg-primary text-primary-foreground shadow-lg" : "text-slate-300 hover:text-white",
+                      "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
+                      isActive
+                        ? "bg-primary text-primary-foreground shadow-lg"
+                        : "text-foreground/70 hover:text-foreground hover:bg-muted",
                     )}
                     onClick={() => setOpen(false)}
                   >
@@ -120,7 +122,7 @@ export function Sidebar() {
           </div>
 
           <div className="px-2 py-2">
-            <h2 className="mb-2 px-2 text-xs font-semibold tracking-tight text-slate-400 uppercase">System</h2>
+            <h2 className="mb-2 px-2 text-xs font-semibold tracking-tight text-muted-foreground uppercase">System</h2>
             <div className="space-y-1">
               {bottomNavigation.map((item) => {
                 const isActive = pathname === item.href
@@ -129,8 +131,10 @@ export function Sidebar() {
                     key={item.name}
                     href={item.href}
                     className={cn(
-                      "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all hover:bg-slate-800 hover:text-white",
-                      isActive ? "bg-primary text-primary-foreground shadow-lg" : "text-slate-300 hover:text-white",
+                      "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
+                      isActive
+                        ? "bg-primary text-primary-foreground shadow-lg"
+                        : "text-foreground/70 hover:text-foreground hover:bg-muted",
                     )}
                     onClick={() => setOpen(false)}
                   >
@@ -150,14 +154,14 @@ export function Sidebar() {
       </ScrollArea>
 
       {/* Bottom section */}
-      <div className="border-t border-slate-800 p-4">
-        <div className="flex items-center gap-3 rounded-lg bg-slate-800 p-3">
+      <div className="border-t border-border p-4">
+        <div className="flex items-center gap-3 rounded-lg bg-muted p-3">
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary">
             <TrendingUp className="h-4 w-4 text-primary-foreground" />
           </div>
           <div className="flex-1">
-            <p className="text-sm font-medium text-white">Upgrade Plan</p>
-            <p className="text-xs text-slate-400">Get more features</p>
+            <p className="text-sm font-medium text-foreground">Upgrade Plan</p>
+            <p className="text-xs text-muted-foreground">Get more features</p>
           </div>
         </div>
       </div>
