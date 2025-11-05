@@ -30,7 +30,7 @@ const navigation = [
   },
   {
     name: "Products",
-    href: "/inventory",
+    href: "/products",
     icon: Package,
     badge: null,
   },
@@ -169,7 +169,7 @@ export function Sidebar() {
       {/* Mobile Sidebar */}
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
-          <Button variant="outline" size="icon" className="shrink-0 md:hidden">
+          <Button variant="outline" size="icon" className="shrink-0 md:hidden bg-transparent">
             <Menu className="h-5 w-5" />
             <span className="sr-only">Toggle navigation menu</span>
           </Button>

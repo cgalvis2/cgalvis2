@@ -63,6 +63,13 @@
   * {
     @apply border-border;
   }
+  /* ensure light mode background applies correctly */
+  html {
+    @apply bg-white text-foreground;
+  }
+  html.dark {
+    @apply bg-slate-950;
+  }
   body {
     @apply bg-background text-foreground;
   }
